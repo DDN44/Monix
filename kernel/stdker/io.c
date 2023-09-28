@@ -84,6 +84,15 @@ void con_print_hex32(uint32_t num)
     return;
 }
 
+void con_printkernelpanic(uint32_t pannum)
+{
+    char panicarr[] = "KERNEL IS DEAD: ";
+    con_print(&panicarr);
+    con_print_hex32(pannum);
+
+    return;
+}
+
 static inline void outb(uint16_t port, uint8_t val)
 {
     asm volatile ( "outb %0, %1" : : "a"(val), "Nd"(port) :"memory");

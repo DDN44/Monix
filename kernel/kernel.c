@@ -10,6 +10,8 @@ void kernel_main(void)
     con_print(&str);
     con_newln();
 
+    
+
     while(1)
     {
         term_kernel();

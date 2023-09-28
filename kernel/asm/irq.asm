@@ -1,5 +1,5 @@
 bits 32
-global irq_init, 
+global irq_init
 
 irq_init:
     push ebp
