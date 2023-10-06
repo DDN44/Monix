@@ -14,7 +14,7 @@ main:
     ;MOV [ES:BX], byte 0x48
     ;MOV [ES:BX+1], byte 0x1F
 
-    MOV SI, packet;load kernal into ram
+    MOV SI, packet;load kernel into ram
     MOV AH, 0x42
     MOV DL, 0x80
 
@@ -40,6 +40,14 @@ main:
 stak:
 bits 32
 promode32:
+;moving:
+;    MOV EBX, 0
+;    MOV AH, [0x8000+EBX]
+;    MOV [0x00000000+EBX], AH
+;    INC EBX
+;    CMP EBX, 4096
+;    JLE moving
+
     MOV AX, DATASEG
     MOV DS, AX
     MOV SS, AX
