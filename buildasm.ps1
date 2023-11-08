@@ -1,1 +1,0 @@
-nasm ./boot/boot.asm -f bin -o ./build/boot.o

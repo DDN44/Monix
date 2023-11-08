@@ -13,7 +13,8 @@ void con_print(char *s);
 void con_print_hex32(uint32_t num);
 void con_printkernelpanic(uint32_t pannum);
 
-static inline void outb(uint16_t port, uint8_t val);
-static inline char inb(uint16_t port);
+void outb(uint16_t port, uint8_t val);
+uint8_t inb(uint16_t port);
+uint16_t inw(uint16_t port);
 
 void disable_cursor();

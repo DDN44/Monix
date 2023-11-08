@@ -1,1 +1,1 @@
-qemu-system-x86_64.exe -hda ./os.img -serial stdio -s
+qemu-system-x86_64.exe -m 128m -hda ./os.img -serial stdio -s

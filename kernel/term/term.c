@@ -10,4 +10,5 @@ void term_kernel()
         con_print(&prompt);
         promptpresent = 1;
     }
+    return;
 }
