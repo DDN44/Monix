@@ -12,11 +12,11 @@ void kernel_main(void)
     //ser_init();
     ////con_print_hex32(*(uint32_t *)0x8000);
     ////con_newln();
-    ////ata_read(1, 1, 0xF0000);
-    ////con_print_hex32(*(uint32_t *)0x8D00);
-    ////con_newln();
 
-    char str[] = "Kernel loaded and running";
+    con_print_hex32(*(uint32_t *)0x00100000);
+    con_newln();
+
+    uint8_t str[] = "Kernel loaded and running";
     con_print(&str);
     con_newln();
 

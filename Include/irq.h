@@ -19,7 +19,7 @@ typedef struct {
 uint32_t get_idt();
 void sti();
 void cli();
-void idt_assign(uint8_t irq, uint32_t addr, uint32_t *idt);
+void idt_assign(uint8_t irq, uint32_t addr, idt_entry_t *pnt);
 void irq_cpu_init();
 void idt_init(uint32_t desc);
 void irq_init();

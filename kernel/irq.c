@@ -12,9 +12,8 @@ void sti()
     __asm__("sti");
 }
 
-void idt_assign(uint8_t irq, uint32_t addr, uint32_t *idt)
+void idt_assign(uint8_t irq, uint32_t addr, idt_entry_t *pnt)
 {
-    idt_entry_t *pnt = idt + (irq * 8);
     pnt->addr_low = addr & 0xFFFF;
     pnt->selector = 0x0008;
     pnt->zero = 0x00;
@@ -24,15 +23,16 @@ void idt_assign(uint8_t irq, uint32_t addr, uint32_t *idt)
 
 idtr_t idt_desc;
 
+static idt_entry_t idt_table[256];
 // IDT is copied into address 0x8D00 and loaded
 
 void irq_init()
 {
     //mem_cpyblock(0x7C95, 0x0500, 1);
     //uint16_t i = 0;
-    //while(i < 40)
+    //while(i < 64)
     //{
-    //    idt_assign(i, irq_handler, 0x7C95);
+    //    idt_assign(i, irq_handler, &idt_table[i]);
     //    i++;
     //}
     idt_desc.addr = 0x7CB0;

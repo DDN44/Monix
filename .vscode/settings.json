@@ -1,3 +1,4 @@
 {
-    "C_Cpp.default.compilerPath": "gcc"
+    "C_Cpp.default.compilerPath": "gcc",
+    "cmake.configureOnOpen": false
 }
