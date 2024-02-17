@@ -1,11 +1,16 @@
 #include <stdint.h>
 
+#define wait() asm("nop; nop; nop; nop; nop");
+
 extern const uint16_t VGA_WIDTH;
 extern const uint16_t VGA_COLOR;
 extern uint16_t con_x;
 extern uint16_t con_y;
 extern uint16_t cursor_pos;
 
+void init_keyboard();
+uint8_t keyboard_in();
+uint8_t poll_keyboard();
 void con_init();
 void con_newln();
 void con_putc(char color, const char chara);

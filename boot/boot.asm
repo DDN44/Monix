@@ -66,32 +66,7 @@ promode32:
     MOV EBP, 0x7BFF
     MOV ESP, EBP
     
-    JMP CODESEG:0x8000
-
-irq_handler:
-    pusha
-    mov al, 0x49
-    mov dx, 0x03F8
-    out dx, al
-    mov al, 0x20
-    mov dx, 0x20
-    out dx, al
-    mov dx, 0xA0
-    out dx, al
-    popa
-    iret
-irq_keyboard:
-    pusha
-    mov al, 0x32
-    mov dx, 0x03F8
-    out dx, al
-    mov al, 0x20
-    mov dx, 0x20
-    out dx, al
-    mov dx, 0xA0
-    out dx, al
-    popa
-    iret
+    JMP CODESEG:0x7E00
 
 bits 16
 tabl:
@@ -125,34 +100,9 @@ packet:
     db 16
     db 0
     dw 0x0028
-    dw 0x8000, 0x0000
+    dw 0x7E00, 0x0000
     dd 0x00000001
     dd 0x00000000
-
-idt_desc:
-    dw idt_end - idt_table - 1
-    dd idt_table
-
-idt_table:
-    dw irq_handler ;0 - 15 of entry address
-    dw 0b0000_0000_0000_1000 ;segment selector
-    db 0x00 ;no touch :)
-    db 0b1000_1110 ;entry options and interrupt type
-    dw 0x0000 ;16 - 31
-
-    dw irq_keyboard ;0 - 15 of entry address
-    dw 0b0000_0000_0000_1000 ;segment selector
-    db 0x00 ;no touch :)
-    db 0b1000_1110 ;entry options and interrupt type
-    dw 0x0000 ;16 - 31
-%rep 38
-    dw irq_handler ;0 - 15 of entry address
-    dw 0b0000_0000_0000_1000 ;segment selector
-    db 0x00 ;no touch :)
-    db 0b1000_1110 ;entry options and interrupt type
-    dw 0x0000 ;16 - 31
-%endrep
-idt_end:
 
 times 510-($-$$) db 0
 dw 0AA55h

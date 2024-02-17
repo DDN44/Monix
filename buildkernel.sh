@@ -1,12 +1,12 @@
 #!/bin/bash
 
-KERNELFILES="./kernel/kernel.c ./kernel/stdker/io.c ./kernel/term/term.c ./kernel/mem/mem.c ./kernel/init.c ./kernel/irq.c ./drivers/serial.c ./drivers/ata.c"
-OUTFILES="./kernel.o ./io.o ./term.o ./idt.o ./irq.o ./mem.o ./init.o ./serial.o ./ata.o"
+KERNELFILES="./kernel/kernel.c ./kernel/stdker/io.c ./kernel/term/term.c ./kernel/mem/mem.c ./kernel/init.c ./kernel/irq.c ./drivers/serial.c ./drivers/ata.c ./drivers/keyboard.c"
+OUTFILES="./kernel.o ./io.o ./term.o ./idt.o ./irq.o ./mem.o ./init.o ./serial.o ./ata.o ./keyboard.o"
 
-CC=/home/me/cross/bin/i686-elf-gcc
+CC=/home/me/opt/cross/bin/i686-elf-gcc
 OPT="-c -w -nostdinc -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-3dnow -mno-red-zone"
 AS=nasm
-LINKER=/home/me/cross/bin/i686-elf-ld
+LINKER=/home/me/opt/cross/bin/i686-elf-ld
 BUILD=./build
 
 $CC $OPT -I ./Include $KERNELFILES -g

@@ -17,30 +17,29 @@ void idt_assign(uint8_t irq, uint32_t addr, idt_entry_t *pnt)
     pnt->addr_low = addr & 0xFFFF;
     pnt->selector = 0x0008;
     pnt->zero = 0x00;
-    pnt->type = 0b10001111;
+    pnt->type = 0b10001110;
     pnt->addr_hi = (addr >> 16) & 0xFFFF;
 }
 
-idtr_t idt_desc;
-
-static idt_entry_t idt_table[256];
-// IDT is copied into address 0x8D00 and loaded
-
 void irq_init()
 {
-    //mem_cpyblock(0x7C95, 0x0500, 1);
-    //uint16_t i = 0;
-    //while(i < 64)
-    //{
-    //    idt_assign(i, irq_handler, &idt_table[i]);
-    //    i++;
-    //}
-    idt_desc.addr = 0x7CB0;
-    idt_desc.size = 40 * 8 - 1;
+    static idtr_t idt_desc;
+    uint16_t i = 0;
+    while(i < 64)
+    {
+        idt_assign(i, irq_key_handler + 0x8E00, 0x8000 + (i * 8));
+        i++;
+    }
+
+    idt_assign(21, irq_key_handler + 0x8E00, 0x8000 + 8);
+    idt_assign(0x21, irq_key_handler + 0x8E00, 0x8000 + 8);
+
+    idt_desc.addr = 0x8000;
+    idt_desc.size = 255 * 8 - 1;
 
     idt_init(&idt_desc);
     uint8_t elplpl[] = "IDT: ";
     con_print(&elplpl);
-    con_print_hex32(*(uint32_t *)0x7CB0);
+    con_print_hex32(*(uint32_t *)0x8000);
     con_newln();
 }

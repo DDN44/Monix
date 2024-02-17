@@ -1,5 +1,6 @@
 bits 32
-global idt_init, irq_handler
+global idt_init, irq_handler, irq_key_handler
+extern poll_keyboard
 
 idt_init:
     pop ebx
@@ -17,11 +18,29 @@ idt_init:
 
 irq_handler:
     pusha
-    mov al, 0x49
+
+    mov al, 'I'
     mov dx, 0x03F8
     out dx, al
     mov al, 0x20
     mov dx, 0x20
     out dx, al
+    
     popa
     iret
+
+irq_key_handler:
+    pusha
+
+    call poll_keyboard
+    mov dx, 0x03F8
+    out dx, al
+    mov al, 0x20
+    mov dx, 0x20
+    out dx, al
+
+    popa
+    iret
+
+current_key:
+    db 0x00
