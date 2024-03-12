@@ -11,27 +11,21 @@ void kernel_main(void)
     con_init();
     irq_init();
     init_keyboard();
-    //ser_init();
-    ////con_print_hex32(*(uint32_t *)0x8000);
-    ////con_newln();
+    
 
-    uint8_t str[] = "Kernel loaded and running";
-    con_print(&str);
+    con_print("Kernel loaded and running");
     con_newln();
 
     while(1)
     {
-        term_kernel();
-        if(cycles == 0)
+        if(keyrel == 0)
         {
-            uint8_t poll = poll_keyboard();
-            if(poll == 0x02)
+            if(lastkey == 0x31)
             {
-                con_print_hex32(poll);
-                con_print("pressed 1 " + 0x8E00);
+                
             }
         }
-        cycles++;
+        term_kernel();
     }
 
     return;

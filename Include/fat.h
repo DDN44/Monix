@@ -2,18 +2,18 @@
 
 typedef struct {
     uint8_t oemstr[8];
-    uint16_t sectorbytes 512;
-    uint8_t sectorperclust 4;
-    uint16_t reservedsectors 4;
-    uint8_t fatnum 2;
-    uint16_t rootentries 512;
-    uint16_t totalsectors 49984;
-    uint8_t type 0xF8;
-    uint16_t sectorsperfat 52;
-    uint16_t sectorspertrack 32;
-    uint16_t headsorsides 4;
-    uint32_t hiddensectors 0;
-    uint32_t largesectors 0;
+    uint16_t sectorbytes;
+    uint8_t sectorperclust;
+    uint16_t reservedsectors;
+    uint8_t fatnum;
+    uint16_t rootentries;
+    uint16_t totalsectors;
+    uint8_t type;
+    uint16_t sectorsperfat;
+    uint16_t sectorspertrack;
+    uint16_t headsorsides;
+    uint32_t hiddensectors;
+    uint32_t largesectors;
 }__attribute__((packed)) fatbpb_t;
 
 typedef struct {

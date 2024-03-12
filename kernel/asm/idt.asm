@@ -32,9 +32,8 @@ irq_handler:
 irq_key_handler:
     pusha
 
+    mov al, 32
     call poll_keyboard
-    mov dx, 0x03F8
-    out dx, al
     mov al, 0x20
     mov dx, 0x20
     out dx, al

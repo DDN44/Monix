@@ -27,19 +27,19 @@ void irq_init()
     uint16_t i = 0;
     while(i < 64)
     {
-        idt_assign(i, irq_key_handler + 0x8E00, 0x8000 + (i * 8));
+        idt_assign(i, irq_handler, 0x8000 + (i * 8));
         i++;
     }
 
-    idt_assign(21, irq_key_handler + 0x8E00, 0x8000 + 8);
-    idt_assign(0x21, irq_key_handler + 0x8E00, 0x8000 + 8);
+    idt_assign(0, irq_handler, 0x8000 + (0 * 8));
+    idt_assign(0x20, irq_key_handler, 0x8000 + (0x21 * 8));
 
     idt_desc.addr = 0x8000;
     idt_desc.size = 255 * 8 - 1;
 
+    pic_remap(0x20, 0x28);
     idt_init(&idt_desc);
-    uint8_t elplpl[] = "IDT: ";
-    con_print(&elplpl);
+    con_print("IDT: ");
     con_print_hex32(*(uint32_t *)0x8000);
     con_newln();
 }

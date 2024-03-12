@@ -68,7 +68,7 @@ void ata_read(uint64_t lba, uint16_t sectcount, uint8_t *buffer)
             temp = inw(0x1F0);
             buffer[iblk + nblk] = temp & 0xFF;
             buffer[(iblk + 1) + nblk] = (temp >> 8) & 0xFF;
-            iblk++;
+            iblk += 2;
         }
     }
 }
