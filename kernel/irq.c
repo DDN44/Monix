@@ -25,7 +25,7 @@ void irq_init()
 {
     static idtr_t idt_desc;
     uint16_t i = 0;
-    while(i < 64)
+    while(i < 256)
     {
         idt_assign(i, irq_handler, 0x8000 + (i * 8));
         i++;
@@ -35,7 +35,7 @@ void irq_init()
     idt_assign(0x20, irq_key_handler, 0x8000 + (0x21 * 8));
 
     idt_desc.addr = 0x8000;
-    idt_desc.size = 255 * 8 - 1;
+    idt_desc.size = 64 * 8 - 1;
 
     pic_remap(0x20, 0x28);
     idt_init(&idt_desc);

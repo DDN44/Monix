@@ -1,5 +1,8 @@
 #include <stdint.h>
 
+#ifndef _FAT_H_
+#define _FAT_H_
+
 typedef struct {
     uint8_t oemstr[8];
     uint16_t sectorbytes;
@@ -39,3 +42,18 @@ typedef struct {
     uint16_t clustlow;
     uint32_t size;
 }__attribute__((packed)) fatstd_t; //8.3 fat descriptor format
+
+typedef struct {
+    uint8_t order;
+    uint16_t name1[5];
+    uint8_t attribute;
+    uint8_t type;
+    uint8_t checksum;
+    uint16_t name2[6];
+    uint16_t zero;
+    uint16_t name3[2];
+}__attribute__((packed)) fatlfn_t; //Long File Name Entry
+
+void fat_init();
+
+#endif

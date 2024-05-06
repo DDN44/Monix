@@ -1,14 +1,15 @@
 #!/bin/bash
 
-KERNELFILES="./kernel/kernel.c ./kernel/stdker/io.c ./kernel/term/term.c ./kernel/mem/mem.c ./kernel/init.c ./kernel/irq.c ./drivers/serial.c ./drivers/ata.c ./drivers/keyboard.c"
-OUTFILES="./kernel.o ./io.o ./term.o ./idt.o ./irq.o ./mem.o ./init.o ./serial.o ./ata.o ./keyboard.o"
+KERNELFILES="./kernel/kernel.c ./kernel/stdker/io.c ./kernel/term/term.c ./kernel/mem/mem.c ./kernel/init.c ./kernel/irq.c ./drivers/serial.c ./drivers/ata.c ./drivers/keyboard.c ./fs/fat.c ./kernel/gdt.c ./fs/file.c"
+OUTFILES="./kernel.o ./io.o ./term.o ./idt.o ./irq.o ./mem.o ./init.o ./serial.o ./ata.o ./keyboard.o ./fat.o ./gdt.o ./file.o"
 
-CC=/home/me/opt/cross/bin/i686-elf-gcc
-OPT="-c -w -nostdinc -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-3dnow -mno-red-zone"
+CC=gcc
+OPT="-m32 -c -w -nostdinc -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-3dnow -mno-red-zone"
 AS=nasm
-LINKER=/home/me/opt/cross/bin/i686-elf-ld
+LINKER=ld
 BUILD=./build
 
 $CC $OPT -I ./Include $KERNELFILES -g
 $AS ./kernel/asm/idt.asm -f elf -o ./idt.o
-$LINKER -T ./kernel/kernel.ld -o ./build/kernel.bin $BUILD/kboot.o $OUTFILES
+$AS ./boot/multiboot.asm -f elf -o ./build/multiboot.o
+$LINKER -melf_i386 -T ./kernel/kernel.ld -o ./build/kernel.elf ./build/kboot.o $OUTFILES

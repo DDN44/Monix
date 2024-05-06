@@ -9,15 +9,11 @@ void ata_poll()
     while(polling == 1)
     {
         status = inb(0x1F0 + 7);
-        con_print_hex32(status);
         if((status & 0x80) == 0 && (status & 8) == 8)
         {
             polling = 0;
         }
     }
-    uint8_t ataex[] = " poll succeeded";
-    con_print(&ataex);
-    con_newln();
 }
 
 void ata_sendreq(uint64_t lba, uint16_t sectcount, uint8_t reqtype)
