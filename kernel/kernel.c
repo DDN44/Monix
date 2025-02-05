@@ -12,12 +12,11 @@
 
 void kernel_main(void)
 {
-    gdt_init();
     uint8_t cycles = 0;
     con_init();
     file_init();
     //fat_init();
-    irq_init();
+    //irq_init();
     //init_keyboard();
     //file_t testfile;
     //uint8_t testp[3] = "hi";
@@ -32,6 +31,7 @@ void kernel_main(void)
     while(1)
     {
         term_kernel();
+        //con_print("Hi");
     }
 
     return;

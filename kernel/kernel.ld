@@ -1,4 +1,4 @@
-ENTRY(kernel_main)
+ENTRY(kernel_boot)
 OUTPUT_FORMAT(elf32-i386)
 
 SECTIONS
