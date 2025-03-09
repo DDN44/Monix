@@ -3,7 +3,7 @@
 #define wait() asm("nop; nop; nop; nop; nop");
 
 extern uint8_t lastkey;
-extern uint8_t keyrel;
+extern uint8_t keyevnt;
 
 extern const uint16_t VGA_WIDTH;
 extern uint16_t VGA_COLOR;

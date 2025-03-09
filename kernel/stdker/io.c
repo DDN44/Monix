@@ -15,10 +15,24 @@ void con_init()
     return;
 }
 
+void con_scrlup()
+{
+    for(uint16_t i; i < VGA_WIDTH * 25; i++)
+    {
+        volatile char *screen_mem = (volatile char*)0xB8000;
+        screen_mem[i] = screen_mem[i + VGA_WIDTH];
+    }
+}
+
 void con_newln()
 {
     con_x = 0;
     con_y += 1;
+    if(con_y >= 24)
+    {
+        con_y = 24;
+        con_scrlup();
+    }
 }
 
 void con_printkernelpanic(uint32_t pannum)

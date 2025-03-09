@@ -1,14 +1,27 @@
 bits 32
 extern kernel_main
-global kernel_boot
+global kernel_boot, get_esp
 
 kernel_boot:
+    cli
 
-    LGDT [tabl_desc]
+    lgdt [tabl_desc]
+    jmp 0x0008:fix_segment
+fix_segment:
+    mov ax, 0x0010
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
 
-    CALL kernel_main
+    call kernel_main
 
-    JMP $
+    jmp $
+
+get_esp:
+    mov eax, esp
+    ret
 
 tabl:
     dq 0 ;NULL 64 bit

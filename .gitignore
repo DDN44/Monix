@@ -2,4 +2,6 @@
 *.o
 *.bin
 *.img
+*.iso
+*.elf
 diskmnt/*

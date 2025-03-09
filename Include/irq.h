@@ -24,6 +24,7 @@ void irq_cpu_init();
 void idt_init(uint32_t desc);
 void irq_init();
 void irq_handler();
+void irq_handler_spur();
 void irq_key_handler();
 void irq_handler_c();
 #endif

@@ -4,7 +4,7 @@ KERNELFILES="./kernel/kernel.c ./kernel/stdker/io.c ./kernel/term/term.c ./kerne
 OUTFILES="./kernel.o ./io.o ./term.o ./idt.o ./irq.o ./mem.o ./init.o ./serial.o ./ata.o ./keyboard.o ./fat.o ./gdt.o ./file.o"
 
 CC=gcc
-OPT="-nostdinc -fno-stack-protector -m32 -c -w -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-3dnow -mno-red-zone"
+OPT="-fpermissive -nostdinc -fno-stack-protector -m32 -c -w -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-3dnow -mno-red-zone"
 AS=nasm
 LINKER=ld
 BUILD=./build
