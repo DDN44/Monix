@@ -9,7 +9,7 @@ uint8_t keyevnt;
 static uint8_t scantable1[256] =
 {
 //  1     2     3     4     5     6     7     8     9     0    a     b    c     d     e     f
-    0x00, 0x00, 0x31, 0x32, 0x33, 0x34, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0E, 0x00, //0
+    0x00, 0x00, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 0x00, 0x00, 0x0E, 0x00, //0
     'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 0x00, 0x00, 0x1C, 0x00, 'a', 's', //1
     'd', 'f', 'g', 'h', 'j', 'k', 'l', 0x00, 0x00, 0x00, 0x00, 0x00, 'z', 'x', 'c', 'v', //2
     'b', 'n', 'm', '2', '3', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //3
@@ -120,7 +120,7 @@ trythefuckagain:
     }
     if((testresult == 0xFC) || (testresult == 0xFD))
     {
-        con_print("self test fail :( :: )");
+        con_print("self test fail :(");
         con_print_hex32(testresult);
         con_newln();
     }
@@ -148,4 +148,41 @@ uint8_t poll_keyboard()
     tempkey = scantable1[tempkey];
     lastkey = tempkey;
     return tempkey;
+}
+
+uint8_t strbuf[512];
+
+uint8_t *reqstr_keyboard()
+{
+    uint8_t done = 0;
+    uint16_t bufpos = 0;
+
+    for(uint16_t i=0; i < 512; i++)
+    {
+        strbuf[i] = 0;
+    }
+    
+    while(done == 0)
+    {
+        if(keyevnt == 1)
+        {
+            if(lastkey == 0)
+            {
+                keyevnt = 0;
+            }
+            if(lastkey == 0x1C)
+            {
+                strbuf[bufpos + 1] = 0;
+                con_newln();
+                done = 1;
+            }else{
+                con_putc(VGA_COLOR, lastkey);
+                strbuf[bufpos] = lastkey;
+                bufpos++;
+            }
+            keyevnt = 0;
+        }
+    }
+
+    return &strbuf;
 }

@@ -4,6 +4,9 @@
 #define _FAT_H_
 
 typedef struct {
+    uint8_t na;
+    uint8_t na2;
+    uint8_t na3;
     uint8_t oemstr[8];
     uint16_t sectorbytes;
     uint8_t sectorperclust;
@@ -55,5 +58,8 @@ typedef struct {
 }__attribute__((packed)) fatlfn_t; //Long File Name Entry
 
 void fat_init();
+fatstd_t *fat_get_entry(uint8_t *str);
+void fat_dir_list();
+void *fat_load_file(uint8_t *str);
 
 #endif

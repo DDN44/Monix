@@ -1,19 +1,13 @@
 #include <stdint.h>
 #include <stdker.h>
+#include <stdarg.h>
+#include <mem.h>
 
 const uint16_t VGA_WIDTH = 160;
 uint16_t VGA_COLOR;
 uint16_t con_x;
 uint16_t con_y;
 uint16_t cursor_pos;
-
-void con_init()
-{
-    con_x = 0;
-    con_y = 0;
-    VGA_COLOR = 0x0A;
-    return;
-}
 
 void con_scrlup()
 {
@@ -100,6 +94,22 @@ void con_putc(char color, const char chara)
     update_cursor(con_x, con_y);
 }
 
+void con_init()
+{
+    con_x = 0;
+    con_y = 0;
+    VGA_COLOR = 0x0A;
+    for(uint32_t i=0; i < 80*25; i++)
+    {
+        con_putc(VGA_COLOR, ' ');
+    }
+
+    con_x = 0;
+    con_y = 0;
+
+    return;
+}
+
 void con_print(char *s)
 {
     char *string = s;
@@ -146,6 +156,96 @@ void con_print_hex32(uint32_t num)
     con_putc(VGA_COLOR, numseg8);
 
     return;
+}
+
+uint8_t *var_to_str(uint32_t var, uint8_t *buf)
+{
+    int is_negative = 0;
+    int i = 0;
+
+    if(var == 0)
+    {
+        buf[i++] = '0';
+        buf[i] = '\0';
+        return;
+    }
+
+    if(var < 0)
+    {
+        is_negative = 1;
+        var = -var;
+    }
+
+    while(var != 0)
+    {
+        int digit = var % 10;
+        buf[i++] = '0' + digit;
+        var = var / 10;
+    }
+
+    if (is_negative) {
+        buf[i++] = '-';
+    }
+
+    buf[i] = '\0';
+
+    for (int j = 0, k = i - 1; j < k; j++, k--) {
+        char temp = buf[j];
+        buf[j] = buf[k];
+        buf[k] = temp;
+    }
+}
+
+void printk(uint8_t *str, ...)
+{
+    va_list va;
+    uint8_t x = 255;
+    uint16_t count = 0;
+    for(uint16_t i=0; x != 0; i++)
+    {
+        x = str[i];
+        if(x == '%')
+        {
+            count++;
+        }
+    }
+    x = 255;
+    va_start(va, count);
+    for(uint16_t i=0; x != 0; i++)
+    {
+        x = str[i];
+        if(x == '%')
+        {
+            switch(str[i + 1])
+            {
+                case 'd':
+                    char buf[40];
+                    var_to_str(va_arg(va, uint32_t), buf);
+                    con_print(buf);
+                    i++;
+                    break;
+            }
+        } else if(x == '\n'){
+            con_newln();
+        } else {
+            con_putc(VGA_COLOR, x);
+        }
+    }
+    va_end(va);
+}
+
+uint32_t strcmp(uint8_t *str1, uint8_t *str2)
+{
+    uint8_t match = 1;
+    uint16_t i;
+    for(i=0; i < 65000; i++)
+    {
+        if((str1[i] == 0) || (str2[i] == 0)) break;
+        if(str1[i] != str2[i]) match = 0;
+    }
+    if(str1[i] != str2[i]) match = 0;
+    if(match == 1) return 0;
+    return -1;
 }
 
 void io_wait()

@@ -1,4 +1,12 @@
 {
     "C_Cpp.default.compilerPath": "gcc",
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "files.associations": {
+        "sstream": "c",
+        "bitset": "c",
+        "algorithm": "c",
+        "hash_map": "c",
+        "hash_set": "c",
+        "format": "c"
+    }
 }

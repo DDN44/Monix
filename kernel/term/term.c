@@ -1,4 +1,5 @@
 #include <stdker.h>
+#include <fat.h>
 
 uint8_t keybuffer[16];
 uint8_t bufpos = 0;
@@ -8,8 +9,11 @@ uint8_t initial = 0;
 
 uint8_t term_cmp(uint8_t *str1, uint8_t *str2)
 {
-    for(uint16_t i,x = 0; x != 0; i++)
+    uint8_t x = 255;
+    uint16_t i;
+    for(i = 0; x != 0; i++)
     {
+        x = str2[i];
         if((str1[i] ^ str2[i]) != 0)
         {
             return 0;
@@ -18,12 +22,28 @@ uint8_t term_cmp(uint8_t *str1, uint8_t *str2)
     return 1;
 }
 
+void clear_buf(uint8_t *buf, uint32_t size)
+{
+    for(uint32_t i=0; i < size; i++)
+    {
+        buf[i] = 0;
+    }
+}
+
 void term_cmd(uint8_t *buf)
 {
-    if(term_cmp(buf, "fuck"))
+    if(strcmp(buf, "dir") == 0)
     {
-        con_print("succ");
+        con_newln();
+        fat_dir_list();
     }
+    if(strcmp(buf, "repet") == 0)
+    {
+        con_newln();
+        con_print(reqstr_keyboard());
+    }
+
+    clear_buf(keybuffer, 16);
 }
 
 void term_kernel()
@@ -45,11 +65,17 @@ void term_kernel()
 
     if(keyevnt == 1)
     {
+        if(lastkey == 0)
+        {
+            keyevnt = 0;
+            return;
+        }
         if(lastkey == 0x1C)
         {
+            lastkey = 0;
+            keyevnt = 0;
             term_cmd(keybuffer);
             con_newln();
-            con_print_hex32(bufpos);
             promptpresent = 0;
             bufpos = 0;
         }else{

@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdker.h>
+#include <stdarg.h>
 
 void ser_sendbyte(uint16_t com, uint8_t byte)
 {
@@ -14,6 +15,44 @@ void ser_print(uint8_t *string)
         ser_sendbyte(0x3F8, string[i]);
         i++;
     }
+}
+
+void ser_printk(uint8_t *str, ...)
+{
+    va_list va;
+    uint8_t x = 255;
+    uint16_t count = 0;
+    for(uint16_t i=0; x != 0; i++)
+    {
+        x = str[i];
+        if(x == '%')
+        {
+            count++;
+        }
+    }
+    x = 255;
+    va_start(va, count);
+    for(uint16_t i=0; x != 0; i++)
+    {
+        x = str[i];
+        if(x == '%')
+        {
+            switch(str[i + 1])
+            {
+                case 'd':
+                    char buf[20];
+                    var_to_str(va_arg(va, uint32_t), buf);
+                    ser_print(buf);
+                    i++;
+                    break;
+            }
+        } else if(x == '\n'){
+            ser_sendbyte(0x3F8, '\n');
+        } else {
+            ser_sendbyte(0x3F8, x);
+        }
+    }
+    va_end(va);
 }
 
 //COM1 0x3F8

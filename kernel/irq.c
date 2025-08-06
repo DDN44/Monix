@@ -44,6 +44,7 @@ void irq_init()
 
     idt_assign(0, irq_handler, 0x8000 + (0 * 8));
     idt_assign(0x21, irq_key_handler, 0x8000 + (0x21 * 8));
+    //idt_assign(0x61, syscall_handler, 0x8000 + (0x61 * 8));
 
     idt_desc.addr = 0x8000;
     idt_desc.size = 64 * 8 - 1;

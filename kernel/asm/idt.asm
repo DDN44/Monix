@@ -1,6 +1,6 @@
 bits 32
-global idt_init, irq_handler, irq_handler_spur, irq_key_handler, gdt_load
-extern poll_keyboard
+global idt_init, irq_handler, irq_handler_spur, irq_key_handler, gdt_load, syscall_handler, intcall
+extern poll_keyboard, functp
 
 gdt_load:
     pop ebx

@@ -14,11 +14,15 @@ extern uint16_t cursor_pos;
 void init_keyboard();
 uint8_t keyboard_in();
 uint8_t poll_keyboard();
+uint8_t *reqstr_keyboard();
 void con_init();
 void con_newln();
 void con_putc(char color, const char chara);
 void con_print(char *s);
 void con_print_hex32(uint32_t num);
+uint8_t *var_to_str(uint32_t var, uint8_t *buf);
+uint32_t strcmp(uint8_t *str1, uint8_t *str2);
+void printk(uint8_t *str, ...);
 void con_printkernelpanic(uint32_t pannum);
 
 void outb(uint16_t port, uint8_t val);

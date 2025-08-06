@@ -23,6 +23,8 @@ void idt_assign(uint8_t irq, uint32_t addr, idt_entry_t *pnt);
 void irq_cpu_init();
 void idt_init(uint32_t desc);
 void irq_init();
+void intcall();
+void syscall_handler();
 void irq_handler();
 void irq_handler_spur();
 void irq_key_handler();
