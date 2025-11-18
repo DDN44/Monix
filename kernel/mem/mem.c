@@ -50,9 +50,12 @@ void *mem_find_free_page()
 
 void *dumpoint = HEAPBASE;
 
+uint32_t allocd = 0;
+
 void *mem_alloc_dum(uint32_t size, memnode_t *node)
 {
     void *temp = dumpoint;
+    allocd += size;
     dumpoint += size;
     return temp;
 }

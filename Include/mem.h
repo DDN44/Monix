@@ -9,6 +9,8 @@ typedef struct{
     uint32_t size;
 } memnode_t;
 
+extern uint32_t allocd;
+
 void *mem_alloc_heap(uint32_t size);
 void mem_init();
 void mem_cpy(uint8_t *from, uint8_t *to, uint32_t count);

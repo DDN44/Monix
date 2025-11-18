@@ -1,4 +1,5 @@
 #include <stdker.h>
+#include <mem.h>
 #include <fat.h>
 
 uint8_t keybuffer[16];
@@ -41,6 +42,11 @@ void term_cmd(uint8_t *buf)
     {
         con_newln();
         con_print(reqstr_keyboard());
+    }
+    if(strcmp(buf, "mem") == 0)
+    {
+        con_newln();
+        printk("memory allocated:%dkb", allocd / 1024);
     }
 
     clear_buf(keybuffer, 16);

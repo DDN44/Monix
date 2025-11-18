@@ -7,6 +7,7 @@
 #include <fat.h>
 #include <gdt.h>
 #include <fs.h>
+#include <task.h>
 
 #define IDLE __asm__("nop; nop; nop; nop; nop; nop; nop; nop; nop; nop;")
 
@@ -55,6 +56,7 @@ void kernel_main(void *boot_opts)
     fat_init();
     irq_init();
     init_keyboard();
+    thread_init();
     //file_t testfile;
     //uint8_t testp[3] = "hi";
     //uint8_t testn[] = "fiul";
@@ -82,18 +84,18 @@ void kernel_main(void *boot_opts)
 
     //pnt->sprint("Hello testing\n");
 
-    file = fat_load_file("EXEC");
-
-    for(uint16_t i=0; i < 40; i++)
-    {
-        ser_printk("0x%d ", file[i]);
-    }
+    file = fat_load_file("EXEC2");
 
     mem_cpy(file, (uint8_t *)0x01000000, fat_get_entry("EXEC")->size);
 
     void (*executable)() = 0x01000000;
 
-    executable();
+    //create_task();
+    //switch_task(&threads[1]);
+
+    //executable();
+
+    //switch_task(&threads[0]);
 
     while(1)
     {
