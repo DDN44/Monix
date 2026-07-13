@@ -1,6 +1,6 @@
 bits 32
 extern kernel_main
-global kernel_boot, get_esp
+global kernel_boot, get_esp, tss
 
 kernel_boot:
     cli
@@ -15,6 +15,10 @@ fix_segment:
     mov gs, ax
     mov ss, ax 
 
+    mov eax, esp
+    mov [tss + 4], eax
+    mov ax, 0x18
+    ltr ax
     mov eax, ebx
     push eax
 
@@ -25,6 +29,35 @@ fix_segment:
 get_esp:
     mov eax, esp
     ret
+
+tss:
+    dd 0
+    dd 0 ;ESP0
+    dd 0x10 ;SS0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0
+    dd 0x68 ;IOPB
+    dd 0
 
 tabl:
     dq 0 ;NULL 64 bit
@@ -44,6 +77,15 @@ datades:
     db 0b10010010 ;access byte
     db 0b11001111 ;limit then flags right to left
     db 0x00 ;base 24-31
+
+tssdes:
+    dw 0x0067 ;limit
+    dw tss
+    db 0x00
+    db 0x89
+    db 0b00000000
+    db 0x00
+
 tabl_end:
 
 tabl_desc:

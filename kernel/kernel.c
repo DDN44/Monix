@@ -9,8 +9,6 @@
 #include <fs.h>
 #include <task.h>
 
-#define IDLE __asm__("nop; nop; nop; nop; nop; nop; nop; nop; nop; nop;")
-
 extern uint32_t get_esp();
 
 typedef struct functp{
@@ -71,7 +69,7 @@ void kernel_main(void *boot_opts)
 
     uint8_t *file = fat_load_file("TEST");
 
-    con_print(file);
+    //con_print(file);
     
     ser_printk("fat:%d time:%d\n", fat_get_entry("TEST"), fat_get_entry("TEST")->time);
     ser_printk("esp:%d\n", get_esp());
@@ -84,16 +82,18 @@ void kernel_main(void *boot_opts)
 
     //pnt->sprint("Hello testing\n");
 
-    file = fat_load_file("EXEC2");
+    file = fat_load_file("EXEC");
 
     mem_cpy(file, (uint8_t *)0x01000000, fat_get_entry("EXEC")->size);
 
-    void (*executable)() = 0x01000000;
-
-    //create_task();
+    void (*executable)(void) = (void *)0x01000000;
+    create_task();
     //switch_task(&threads[1]);
 
+    //jump_to_exec();
+
     //executable();
+    //asm volatile ("int $0x80");
 
     //switch_task(&threads[0]);
 

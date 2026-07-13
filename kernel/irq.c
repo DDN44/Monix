@@ -1,7 +1,40 @@
+#include <stdint.h>
 #include <irq.h>
 #include <stdker.h>
 #include <mem.h>
+#include <serial.h>
 
+u8 *exceptions[] = {
+    "Divide by zero",
+    "Debug",
+    "NMI",
+    "Breakpoint",
+    "Overflow",
+    "Bound Range Exceeded",
+    "Invalid Opcode",
+    "Device Not Available",
+    "Double Fault",
+    "Coprocessor Segment Overrun",
+    "Invalid TSS",
+    "Segment Not Present",
+    "Stack-Segment Fault",
+    "General Protection Fault",
+    "Page Fault",
+    "Reserved",
+    "x87 Floating-Point Exception",
+    "Alignment Check",
+    "Machine Check",
+    "SIMD Floating-Point Exception",
+    "Virtualization Exception",
+    "Control Protection Exception",
+    "Reserved",
+    "Hypervisor Injection Exception",
+    "VMM Communication Exception",
+    "Security Exception",
+    "Reserved",
+    "Triple Fault",
+    "FPU Error Interrupt"
+};
 
 void cli()
 {
@@ -30,24 +63,36 @@ void idt_assign(uint8_t irq, uint32_t addr, idt_entry_t *pnt)
     pnt->addr_hi = (addr >> 16) & 0xFFFF;
 }
 
+void syscall_handler_c()
+{
+    ser_printk("SYSCALL\n");
+}
+
 void irq_init()
 {
     static idtr_t idt_desc;
-    uint16_t i = 0;
+    uint16_t i = 32;
     while(i < 256)
     {
         idt_assign(i, irq_handler, 0x8000 + (i * 8));
         i++;
     }
+    i = 0;
+    while(i < 32)
+    {
+        idt_assign(i, stub_table[i], 0x8000 + (i * 8));
+        i++;
+    }
+    //idt_assign(7, irq_handler_spur, 0x8000 + (7 * 8));
 
-    idt_assign(7, irq_handler_spur, 0x8000 + (7 * 8));
-
-    idt_assign(0, irq_handler, 0x8000 + (0 * 8));
+    //idt_assign(0, irq_handler, 0x8000 + (0 * 8));
     idt_assign(0x21, irq_key_handler, 0x8000 + (0x21 * 8));
-    //idt_assign(0x61, syscall_handler, 0x8000 + (0x61 * 8));
+    idt_assign(0x80, syscall_handler, 0x8000 + (0x80 * 8));
+
+    //printk("SYSCALLADDR: %d", syscall_handler);
 
     idt_desc.addr = 0x8000;
-    idt_desc.size = 64 * 8 - 1;
+    idt_desc.size = 255 * 8 - 1;
 
     //set_pit_freq(10);
 
@@ -57,4 +102,18 @@ void irq_init()
     con_print_hex32(*(uint32_t *)0x8000);
     con_newln();
     sti();
+}
+
+u8 exepts = 0;
+
+void exception_handler(u8 e, u32 eip) {
+    ser_printk("EXCEPTION ERROR: ");
+    ser_printk(exceptions[e]);
+    ser_printk("\n");
+    ser_printk("EIP: %d\n", eip);
+    exepts++;
+    if(exepts > 3)
+    {
+        __asm__ volatile ("cli; hlt"); // Completely hangs the computer
+    }
 }

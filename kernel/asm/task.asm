@@ -1,5 +1,6 @@
 bits 32
 global switch_task, current_task
+extern tss
 
 cur_task:
 current_task dd 0
@@ -17,6 +18,7 @@ switch_task:
     mov [ebx], eax
 
     mov esp, [eax]
+    mov [tss + 4], esp
 
     pop ebp
     pop edi

@@ -20,5 +20,6 @@ extern thread_t threads[10];
 extern void create_task();
 extern void switch_task(thread_t *thread);
 extern void thread_init();
+extern void jump_to_exec(void);
 
 #endif

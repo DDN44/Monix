@@ -4,8 +4,8 @@ typedef struct functp{
 
 functp_t *pnt = 0;
 
-int main()
+void main()
 {
     pnt->sprint("Hello from test exec\n");
-    return 0;
+    return;
 }

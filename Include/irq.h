@@ -16,6 +16,8 @@ typedef struct {
     uint32_t addr;
 } __attribute__((packed)) idtr_t;
 
+__attribute__((noreturn)) void exception_handler(u8 e, u32 eip);
+extern void* stub_table[];
 uint32_t get_idt();
 void sti();
 void cli();
@@ -25,6 +27,7 @@ void idt_init(uint32_t desc);
 void irq_init();
 void intcall();
 void syscall_handler();
+void syscall_handler_c();
 void irq_handler();
 void irq_handler_spur();
 void irq_key_handler();
